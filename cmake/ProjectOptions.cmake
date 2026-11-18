@@ -1,0 +1,7 @@
+add_library(tchips_options INTERFACE)
+target_compile_features(tchips_options INTERFACE cxx_std_23)
+if(MSVC)
+  target_compile_options(tchips_options INTERFACE /W4 /permissive- /utf-8)
+else()
+  target_compile_options(tchips_options INTERFACE -Wall -Wextra -Wpedantic -Wconversion -Wshadow)
+endif()

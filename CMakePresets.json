@@ -1,0 +1,47 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": { "major": 3, "minor": 28, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "base", "hidden": true, "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "TCHIPS_ENABLE_NETWORK": "ON",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/.tools/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      },
+      "environment": {
+        "VCPKG_DISABLE_METRICS": "1",
+        "VCPKG_DEFAULT_BINARY_CACHE": "${sourceDir}/.tools/binary-cache",
+        "VCPKG_DOWNLOADS": "${sourceDir}/.tools/downloads"
+      }
+    },
+    {
+      "name": "windows-mingw-debug", "inherits": "base",
+      "displayName": "Windows GCC/MinGW - première phase",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" },
+      "cacheVariables": { "CMAKE_CXX_COMPILER": "g++.exe", "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic", "VCPKG_HOST_TRIPLET": "x64-mingw-dynamic" }
+    },
+    {
+      "name": "windows-msvc-debug", "inherits": "base",
+      "displayName": "Windows MSVC - environnement développeur x64",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" },
+      "cacheVariables": { "CMAKE_CXX_COMPILER": "cl.exe", "VCPKG_TARGET_TRIPLET": "x64-windows", "VCPKG_HOST_TRIPLET": "x64-windows" }
+    },
+    {
+      "name": "linux-server-debug", "inherits": "base",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" },
+      "cacheVariables": { "TCHIPS_BUILD_CLIENT": "OFF", "VCPKG_TARGET_TRIPLET": "x64-linux", "VCPKG_HOST_TRIPLET": "x64-linux" }
+    }
+  ],
+  "buildPresets": [
+    { "name": "windows-mingw-debug", "configurePreset": "windows-mingw-debug", "jobs": 4 },
+    { "name": "windows-msvc-debug", "configurePreset": "windows-msvc-debug", "jobs": 4 },
+    { "name": "linux-server-debug", "configurePreset": "linux-server-debug", "jobs": 4 }
+  ],
+  "testPresets": [
+    { "name": "windows-mingw-debug", "configurePreset": "windows-mingw-debug", "output": { "outputOnFailure": true }, "execution": { "noTestsAction": "error" } },
+    { "name": "windows-msvc-debug", "configurePreset": "windows-msvc-debug", "output": { "outputOnFailure": true }, "execution": { "noTestsAction": "error" } },
+    { "name": "linux-server-debug", "configurePreset": "linux-server-debug", "output": { "outputOnFailure": true }, "execution": { "noTestsAction": "error" } }
+  ]
+}

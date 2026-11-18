@@ -1,0 +1,37 @@
+syntax = "proto3";
+package tchips.protocol.v2;
+
+message Handshake { fixed64 map_fingerprint = 1; }
+message EntityState { uint64 entity_id = 1; double x = 2; double y = 3; double angle = 4; }
+message ConnectionAccepted {
+  uint64 session_id = 1;
+  EntityState player = 2;
+  uint32 tick_rate = 3;
+  double speed = 4;
+  double half_extent = 5;
+  fixed64 map_fingerprint = 6;
+  uint64 server_tick = 7;
+}
+// Intention for exactly one fixed step. No position or client delta time.
+message InputCommand { uint64 sequence = 1; double move_x = 2; double move_y = 3; double angle = 4; }
+message InputBatch { repeated InputCommand commands = 1; }
+message WorldSnapshot { uint64 tick = 1; uint64 acknowledged_input = 2; repeated EntityState entities = 3; }
+message EntitySpawn { uint64 tick = 1; EntityState entity = 2; }
+message EntityDespawn { uint64 tick = 1; uint64 entity_id = 2; }
+message DisconnectReason {
+  enum Code { NORMAL = 0; VERSION_MISMATCH = 1; MAP_MISMATCH = 2; INVALID_MESSAGE = 3; RATE_LIMIT = 4; SERVER_FULL = 5; TIMEOUT = 6; SERVER_STOPPING = 7; }
+  Code code = 1;
+}
+message Envelope {
+  uint32 protocol_version = 1;
+  uint64 session_id = 2;
+  oneof body {
+    Handshake handshake = 10;
+    ConnectionAccepted accepted = 11;
+    InputBatch inputs = 12;
+    WorldSnapshot snapshot = 13;
+    EntitySpawn spawn = 14;
+    EntityDespawn despawn = 15;
+    DisconnectReason disconnect = 16;
+  }
+}

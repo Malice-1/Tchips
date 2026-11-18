@@ -1,0 +1,8 @@
+BasedOnStyle: LLVM
+Standard: c++23
+IndentWidth: 4
+ColumnLimit: 110
+AllowShortFunctionsOnASingleLine: InlineOnly
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+NamespaceIndentation: None

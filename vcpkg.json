@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "tchips-native",
+  "version-string": "0.1.0",
+  "builtin-baseline": "0df93a05b9de080129e653ec4776d7e14a1b2e4f",
+  "dependencies": ["entt"],
+  "features": {
+    "client": { "description": "Fenêtre SDL3 et API SDL_GPU native", "dependencies": [{ "name": "sdl3", "features": ["vulkan"] }] },
+    "tests": { "description": "Tests GoogleTest", "dependencies": ["gtest"] },
+    "network": { "description": "Transport et contrats réseau des prochaines phases", "dependencies": [{ "name": "gamenetworkingsockets", "default-features": false }, "protobuf"] },
+    "ui": { "description": "Interface RmlUi, adaptateur SDL_GPU à développer", "dependencies": ["rmlui"] },
+    "audio": { "description": "Audio miniaudio", "dependencies": ["miniaudio"] },
+    "persistence": { "description": "Adaptateur PostgreSQL transactionnel", "dependencies": ["libpqxx"] },
+    "profiling": { "description": "Instrumentation Tracy", "dependencies": [{ "name": "tracy", "default-features": false }] }
+  }
+}

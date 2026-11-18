@@ -1,0 +1,5 @@
+add_library(tchips_contracts INTERFACE)
+target_include_directories(tchips_contracts INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_compile_features(tchips_contracts INTERFACE cxx_std_23)
+add_library(tchips_geometry STATIC src/world_map.cpp src/collision_system.cpp)
+target_link_libraries(tchips_geometry PUBLIC tchips_contracts PRIVATE tchips_options)
